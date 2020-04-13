@@ -1,5 +1,6 @@
 import 'package:f_202010_todo_class/model/todo.dart';
 import 'package:flutter/material.dart';
+import 'package:f_202010_todo_class/widgets/custom_alert_dialog.dart';
 
 class HomePageTodo extends StatefulWidget {
   @override
@@ -21,8 +22,8 @@ class _HomePageTodoState extends State<HomePageTodo> {
     );
   }
 
-  Widget _list(){
-      return ListView.builder(
+  Widget _list() {
+    return ListView.builder(
       itemCount: todos.length,
       itemBuilder: (context, posicion) {
         var element = todos[posicion];
@@ -31,13 +32,47 @@ class _HomePageTodoState extends State<HomePageTodo> {
     );
   }
 
-  Widget _item(Todo element, int posicion){
-    return Text('$posicion');
+  Widget _item(Todo element, int posicion) {
+    Card todoCard = Card(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+                title: Text(element.title),
+                subtitle: Text(element.body),
+                isThreeLine: true)
+          ],
+        ),
+        color: element.completed == 1 ? Colors.blueGrey : Colors.yellow[200]);
+    return Dismissible(
+        key: UniqueKey(),
+        child: todoCard,
+        direction: DismissDirection.startToEnd,
+        onDismissed: (direction) {
+          setState(() {
+            todos.removeAt(posicion);
+          });
+        },
+        background: Container(
+            color: Colors.red,
+            margin: EdgeInsets.all(4),
+            child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text('Deleting',
+                    textAlign: TextAlign.right,
+                    style: TextStyle(color: Colors.white)))));
   }
 
-  void _addTodo(){
-    setState(() {
-      todos.add(new Todo(title:"itemT", body: "itemB", completed: 0 ));
-    });
+  void _addTodo() async {
+    final todo = await showDialog<Todo>(
+        context: context,
+        builder: (BuildContext context) {
+          return CustomAlertDialog();
+        });
+    if (todo != null) {
+      setState(() {
+        todos.add(todo);
+      });
+    }
   }
 }
