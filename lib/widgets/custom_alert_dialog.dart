@@ -1,4 +1,5 @@
 import 'package:f_202010_todo_class/model/todo.dart';
+import 'package:f_202010_todo_class/widgets/stateless_dropdown.dart';
 import 'package:flutter/material.dart';
 
 class CustomAlertDialog extends StatefulWidget {
@@ -9,6 +10,8 @@ class CustomAlertDialog extends StatefulWidget {
 class NewCustomAlertDialog extends State<CustomAlertDialog> {
   final controllerTitle = new TextEditingController();
   final controllerBody = new TextEditingController();
+  String dropDownValue = 'Default';
+  String selected;
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +33,13 @@ class NewCustomAlertDialog extends State<CustomAlertDialog> {
           controller: controllerBody,
           decoration: new InputDecoration(
               labelText: 'Body', hintText: 'eg. On the master branch'),
+        )),
+        Expanded(
+            child: StatelessDropdown(
+          selected: dropDownValue,
+          onChangedValue: (newValue) => setState(() {
+            dropDownValue = newValue;
+          }),
         ))
       ]),
       actions: <Widget>[
@@ -47,7 +57,8 @@ class NewCustomAlertDialog extends State<CustomAlertDialog> {
               final todo = new Todo(
                   title: controllerTitle.value.text,
                   body: controllerBody.value.text,
-                  completed: 0);
+                  completed: 0,
+                  icon: dropDownValue);
               controllerTitle.clear();
               controllerBody.clear();
               Navigator.of(context).pop(todo);

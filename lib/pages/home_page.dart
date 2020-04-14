@@ -38,6 +38,7 @@ class _HomePageTodoState extends State<HomePageTodo> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             ListTile(
+                leading: todoIcon(element.icon),
                 title: Text(element.title),
                 subtitle: Text(element.body),
                 isThreeLine: true)
@@ -73,6 +74,17 @@ class _HomePageTodoState extends State<HomePageTodo> {
       setState(() {
         todos.add(todo);
       });
+    }
+  }
+
+  Icon todoIcon(String iconString) {
+    switch (iconString) {
+      case "Call":
+        return Icon(Icons.call);
+      case "Homework":
+        return Icon(Icons.contacts);
+      default:
+        return Icon(Icons.check);
     }
   }
 }
